@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>文件上传和下载</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="/js/jquery.min.js" type="application/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/community.js" type="application/javascript"></script>
+</head>
+<body>
+<div>
+    <form action="multifileUpload" method="post" enctype="multipart/form-data" novalidate>
+        <div class="modal-body">
+            <input type="text" th:value="${question.id}" name="id">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">上传文件</span>
+                <input type="file" class="btn btn-success" name="fileName"
+                       aria-describedby="basic-addon3">
+            </div>
+            <br/>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon4">上传头像</span>
+                <input type="file" class="btn btn-success" name="fileName"
+                       aria-describedby="basic-addon3">
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+    </form>
+    <div>
+        <ul>
+            <li>
+                <a class="btn btn-success" th:href="@{'/commodifydownload'+ ${question.id}}"
+                   th:text="${question.id}"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

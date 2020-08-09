@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>技术爱好者平台</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/community.css">
+    <script src="js/jquery.min.js" type="application/javascript"></script>
+    <script src="js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+<div th:insert="navigation::nav"></div>
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 发现</h2>
+                <hr>
+
+                <div class="media" th:each="question : ${pageInfo.getList()}">
+                    <div class="media-left">
+                        <a href="#" th:each="userAvatar : ${userList}">
+                            <img class="media-object img-circle" th:if="${userAvatar.userId} == ${question.creator}"
+                                 th:src="@{/images/{fileName}(fileName=${userAvatar.fileName})}">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">
+                            <div>
+                            <a th:href="@{'/question/'+ ${question.id}}" th:text="${question.title}"></a>
+                                <span class="label label-info question-tag" th:each="tag : ${question.tag.split('，')}">
+                                    <span class="glyphicon glyphicon-tags"></span>
+                                    <span class="label label-info" th:text="${tag}"></span>
+                                </span>
+                            </div>
+                        </h4>
+
+                        <span class="text-desc"><span th:text="${question.likeCount}"></span> 个点赞 • <span
+                                th:text="${question.commentCount}"></span> 个回复 • <span
+                                th:text="${question.viewCount}"></span> 次浏览 • <span
+                                th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span></span>
+                    </div>
+
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <!--显示分页信息-->
+                    <div class="row">
+                        <!--分页文字-->
+                        <div class="col-md-6 result">
+                            当前<span th:text="${pageInfo.pageNum}"></span>页,总共<span th:text="${pageInfo.pages}"></span>页,总共<span th:text="${pageInfo.total}"></span>条记录
+                        </div>
+                        <!--分页条信息-->
+                        <div class="col-md-6">
+                            <nav  aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <li th:if="${pageInfo.pageNum!=1}">
+                                        <a th:href="@{'?'(pageNum=${1})}"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">&lt;&lt;</span>
+                                        </a>
+                                    </li>
+                                    <li th:if="${pageInfo.hasPreviousPage}">
+                                        <a th:href="@{'?'(pageNum=${pageInfo.pageNum - 1})}" aria-label="Previous">
+                                            <span aria-hidden="true">&lt;</span>
+                                        </a>
+                                    </li>
+                                    <li th:each="pageNum : ${pageInfo.navigatepageNums}" th:class="${pageInfo.pageNum == pageNum}? 'active' : ''">
+                                        <a th:href="@{'?'(pageNum=${pageNum})}" th:text="${pageNum}"></a></li>
+                                    <li  th:if="${pageInfo.hasNextPage}">
+                                        <a th:href="@{'?'(pageNum=${pageInfo.pageNum+1})}"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">&gt;</span>
+                                        </a>
+                                    </li>
+                                    <li th:if="${pageInfo.pageNum!=pageInfo.pages}">
+                                        <a th:href="@{'?'(pageNum=${pageInfo.pages})}" aria-label="Previous">
+                                            <span aria-hidden="true">&gt;&gt;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <h3>热门话题</h3>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:each="hotTitle : ${hotTitles}">
+                <a th:href="@{'/question/'+ ${hotTitle.id}}" th:text="${hotTitle.title}"></a>
+            </div>
+            <h3>热门标签</h3>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:each="hotTag : ${hotTags}">
+                <li class="liHotTag" th:each="oneTag : ${hotTag.tags}">
+                    <span class="label label-info hotTag">
+                        <a th:href="@{'/query'+ '?' + 'tag=' + ${oneTag}}" th:text="${oneTag}"></a>
+                    </span>
+                </li>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
